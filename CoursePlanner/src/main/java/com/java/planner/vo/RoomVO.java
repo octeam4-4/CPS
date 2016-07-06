@@ -14,9 +14,18 @@ public class RoomVO {
     String building;
     String roomNo;
     String capacity;
+    boolean isOccupied = false;
 
     public String getBuilding() {
         return building;
+    }
+
+    public boolean isOccupied() {
+        return isOccupied;
+    }
+
+    public void setOccupied(boolean isOccupied) {
+        this.isOccupied = isOccupied;
     }
 
     public void setBuilding(String building) {

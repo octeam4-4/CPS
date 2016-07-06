@@ -45,7 +45,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author sku263
  */
-public class ImportStudents extends javax.swing.JFrame {
+public class ViewStudents extends javax.swing.JFrame {
 
     public class ExcelSheetReader {
 
@@ -107,7 +107,7 @@ public class ImportStudents extends javax.swing.JFrame {
     /**
      * Creates new form ImportStudents
      */
-    public ImportStudents() {
+    public ViewStudents() {
 
         initComponents();
        // setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/icon.png")));
@@ -133,7 +133,7 @@ load();
             Iterator<StudentVO> iterator = CoursePlanner.studentList.iterator();
 		while(iterator.hasNext()){
                     StudentVO studentVO = iterator.next();
-                     s2.addRow(new Object[]{studentVO.getId() , studentVO.getDegree(), studentVO.getTrack()
+                     s2.addRow(new Object[]{studentVO.getId() , studentVO.getDegree(), studentVO.getGradDate()
                        });
 	       
 		}
@@ -160,9 +160,15 @@ load();
                 int confirmed = JOptionPane.showConfirmDialog(null, "Are you sure want redirect to home?", "Redirect to home page", JOptionPane.YES_NO_OPTION);
                 if (confirmed == JOptionPane.YES_OPTION) {
                     try {
+                        if(!Login.isAdmin){
                         CoursePlanner me = new CoursePlanner();
                         me.setVisible(true);
                         setVisible(false);
+                    }else{
+                             CoursePlannerAdmin me = new CoursePlannerAdmin();
+                        me.setVisible(true);
+                        setVisible(false);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -192,7 +198,7 @@ load();
 
             s2.addColumn("Id");
             s2.addColumn("Degree");
-            s2.addColumn("Track");
+            s2.addColumn("GradDate");
            
 
             jTable1.setModel(s2);
@@ -205,9 +211,9 @@ load();
          
 
             jTable1.setAutoResizeMode(jTable1.AUTO_RESIZE_OFF);
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(280);
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(250);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(280);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(400);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(400);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(400);
            
            
 
@@ -231,7 +237,7 @@ for(int i=0;i<jTable1.getRowCount();i++)
     StudentVO studentVO = new StudentVO();
     studentVO.setId((String)jTable1.getValueAt(i, 0));
      studentVO.setDegree((String)jTable1.getValueAt(i, 1));
-      studentVO.setTrack((String)jTable1.getValueAt(i, 2));
+      studentVO.setGradDate((String)jTable1.getValueAt(i, 2));
     
        CoursePlanner.studentList.add(studentVO);
 
@@ -253,26 +259,41 @@ JOptionPane.showMessageDialog(this, "Student Data Saved");
         jButton10 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
         tot = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jButton11 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jButton12 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
 
         jTable1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jTable1.setForeground(new java.awt.Color(0, 102, 255));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Id", "Degree", "Track", "Grad Date"
+                "Id", "Degree", "GradDate"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jTable1.setRowHeight(30);
         jScrollPane1.setViewportView(jTable1);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(70, 150, 951, 390);
 
         jButton10.setBackground(new java.awt.Color(0, 102, 51));
         jButton10.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
@@ -280,12 +301,13 @@ JOptionPane.showMessageDialog(this, "Student Data Saved");
         jButton10.setMnemonic('B');
         jButton10.setText("Import Students");
         jButton10.setToolTipText("Alt+b");
-        jButton10.setActionCommand("Import Students");
         jButton10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton10ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton10);
+        jButton10.setBounds(660, 550, 170, 40);
 
         jButton9.setBackground(new java.awt.Color(255, 51, 51));
         jButton9.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
@@ -298,77 +320,74 @@ JOptionPane.showMessageDialog(this, "Student Data Saved");
                 jButton9ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton9);
+        jButton9.setBounds(860, 550, 150, 40);
 
-        jButton7.setBackground(new java.awt.Color(153, 0, 0));
+        jButton7.setBackground(new java.awt.Color(57, 53, 53));
         jButton7.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jButton7.setForeground(new java.awt.Color(255, 255, 255));
         jButton7.setMnemonic('h');
-        jButton7.setText("Home");
+        jButton7.setText("Back");
         jButton7.setToolTipText("Alt+H");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton7);
+        jButton7.setBounds(1040, 550, 140, 40);
 
-        jButton8.setBackground(new java.awt.Color(153, 0, 0));
+        tot.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        getContentPane().add(tot);
+        tot.setBounds(12, 565, 199, 50);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel1.setText("View Student Data");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(380, 40, 390, 30);
+
+        jButton11.setBackground(new java.awt.Color(57, 53, 53));
+        jButton11.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jButton11.setForeground(new java.awt.Color(255, 255, 255));
+        jButton11.setMnemonic('r');
+        jButton11.setText("Modify Student");
+        jButton11.setToolTipText("Alt+R");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton11);
+        jButton11.setBounds(240, 550, 158, 40);
+
+        jButton8.setBackground(new java.awt.Color(57, 53, 53));
         jButton8.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jButton8.setForeground(new java.awt.Color(255, 255, 255));
         jButton8.setMnemonic('r');
-        jButton8.setText("Refresh");
+        jButton8.setText("Delete Student");
         jButton8.setToolTipText("Alt+R");
         jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton8ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton8);
+        jButton8.setBounds(460, 550, 158, 40);
 
-        tot.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tot, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 302, Short.MAX_VALUE)
-                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(69, 69, 69)
-                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1024, 1024, 1024))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(200, 200, 200)
-                        .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(90, 90, 90)
-                        .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(187, 187, 187)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 951, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(0, 52, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(46, 46, 46)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(tot, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())))
-        );
+        jButton12.setBackground(new java.awt.Color(57, 53, 53));
+        jButton12.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jButton12.setForeground(new java.awt.Color(255, 255, 255));
+        jButton12.setMnemonic('S');
+        jButton12.setText("Add Student");
+        jButton12.setToolTipText("Alt+S");
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton12);
+        jButton12.setBounds(20, 550, 170, 40);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -391,28 +410,68 @@ JOptionPane.showMessageDialog(this, "Student Data Saved");
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
 
-        try {
-            CoursePlanner me = new CoursePlanner();
-            me.setVisible(true);
-            setVisible(false);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+         try {
+                        if(!Login.isAdmin){
+                        CoursePlanner me = new CoursePlanner();
+                        me.setVisible(true);
+                        setVisible(false);
+                    }else{
+                             CoursePlannerAdmin me = new CoursePlannerAdmin();
+                        me.setVisible(true);
+                        setVisible(false);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        try{
+            String studentId = jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString();
+            ModifyStudent std = new ModifyStudent(studentId);
+            std.setVisible(true);
+            setVisible(false);
+        }catch(Exception e){
+            e.printStackTrace();;
+
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
 
         try {
-            ImportStudents me = new ImportStudents();
-            me.setVisible(true);
-            setVisible(false);
-        } catch (Exception e) {
+            String std = jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString();
+            int confirmed = JOptionPane.showConfirmDialog(this, "Confirm Delete, Continue ?");
+            Iterator<StudentVO> it = CoursePlanner.studentList.iterator();
+          while(it.hasNext()){
+           StudentVO studentVO = it.next();
+           if(std.equals(studentVO.getId())){
+            if(confirmed==0){
+                CoursePlanner.studentList.remove(studentVO);
+              
+                break;
+            }
+           }
+       }
+            ViewStudents me = new ViewStudents();
+                me.setVisible(true);
+                setVisible(false);
+        }catch (Exception e) {
             e.printStackTrace();
         }
-
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+
+        AddStudent ast = new AddStudent();
+        ast.setVisible(true);
+        setVisible(false);
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton12ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -431,14 +490,142 @@ JOptionPane.showMessageDialog(this, "Student Data Saved");
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ImportStudents.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewStudents.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ImportStudents.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewStudents.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ImportStudents.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewStudents.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ImportStudents.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewStudents.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -571,16 +758,19 @@ JOptionPane.showMessageDialog(this, "Student Data Saved");
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ImportStudents().setVisible(true);
+                new ViewStudents().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel tot;

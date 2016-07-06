@@ -113,9 +113,15 @@ private static String FILEPATH = "";
                 int confirmed = JOptionPane.showConfirmDialog(null, "Are you sure want redirect to home?", "Redirect to home page", JOptionPane.YES_NO_OPTION);
                 if (confirmed == JOptionPane.YES_OPTION) {
                     try {
+                        if(!Login.isAdmin){
                         CoursePlanner me = new CoursePlanner();
                         me.setVisible(true);
                         setVisible(false);
+                    }else{
+                             CoursePlannerAdmin me = new CoursePlannerAdmin();
+                        me.setVisible(true);
+                        setVisible(false);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -209,8 +215,10 @@ void load1() {
         jButton8 = new javax.swing.JButton();
         tot = new javax.swing.JLabel();
         jButton10 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
 
         jTable1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jTable1.setForeground(new java.awt.Color(0, 102, 255));
@@ -243,7 +251,10 @@ void load1() {
         jTable1.setRowHeight(30);
         jScrollPane1.setViewportView(jTable1);
 
-        jButton9.setBackground(new java.awt.Color(153, 0, 0));
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(30, 172, 1201, 307);
+
+        jButton9.setBackground(new java.awt.Color(57, 53, 53));
         jButton9.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jButton9.setForeground(new java.awt.Color(255, 255, 255));
         jButton9.setMnemonic('S');
@@ -254,8 +265,10 @@ void load1() {
                 jButton9ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton9);
+        jButton9.setBounds(110, 510, 170, 40);
 
-        jButton7.setBackground(new java.awt.Color(153, 0, 0));
+        jButton7.setBackground(new java.awt.Color(57, 53, 53));
         jButton7.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jButton7.setForeground(new java.awt.Color(255, 255, 255));
         jButton7.setMnemonic('h');
@@ -266,8 +279,10 @@ void load1() {
                 jButton7ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton7);
+        jButton7.setBounds(890, 510, 140, 40);
 
-        jButton8.setBackground(new java.awt.Color(153, 0, 0));
+        jButton8.setBackground(new java.awt.Color(57, 53, 53));
         jButton8.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jButton8.setForeground(new java.awt.Color(255, 255, 255));
         jButton8.setMnemonic('r');
@@ -278,10 +293,14 @@ void load1() {
                 jButton8ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton8);
+        jButton8.setBounds(650, 510, 158, 40);
 
         tot.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        getContentPane().add(tot);
+        tot.setBounds(12, 512, 199, 60);
 
-        jButton10.setBackground(new java.awt.Color(153, 0, 0));
+        jButton10.setBackground(new java.awt.Color(57, 53, 53));
         jButton10.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jButton10.setForeground(new java.awt.Color(255, 255, 255));
         jButton10.setMnemonic('r');
@@ -292,44 +311,14 @@ void load1() {
                 jButton10ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton10);
+        jButton10.setBounds(390, 510, 158, 40);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(tot, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(71, 71, 71)
-                        .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(46, 46, 46)
-                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(52, 52, 52)
-                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1201, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(665, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(172, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tot, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(33, 33, 33))
-        );
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 153, 153));
+        jLabel1.setText("View User Data");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(490, 70, 390, 30);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -345,13 +334,19 @@ void load1() {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
 
-        try {
-            CoursePlanner me = new CoursePlanner();
-            me.setVisible(true);
-            setVisible(false);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+      try {
+                        if(!Login.isAdmin){
+                        CoursePlanner me = new CoursePlanner();
+                        me.setVisible(true);
+                        setVisible(false);
+                    }else{
+                             CoursePlannerAdmin me = new CoursePlannerAdmin();
+                        me.setVisible(true);
+                        setVisible(false);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
 
@@ -2472,6 +2467,7 @@ void load1() {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel tot;

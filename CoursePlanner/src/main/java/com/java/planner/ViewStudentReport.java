@@ -5,9 +5,13 @@
  */
 package com.java.planner;
 
+import ca.odell.glazedlists.GlazedLists;
+import ca.odell.glazedlists.swing.AutoCompleteSupport;
 import com.java.planner.vo.CourseVO;
 import com.java.planner.vo.DegreeVO;
 import com.java.planner.vo.FacultyVO;
+import com.java.planner.vo.RoomVO;
+import com.java.planner.vo.ScheduleVO;
 import com.java.planner.vo.SectionVO;
 import com.java.planner.vo.StudentCourseVO;
 import com.java.planner.vo.StudentVO;
@@ -35,7 +39,9 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -48,71 +54,101 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author sku263
  */
-public class ViewSections extends javax.swing.JFrame {
+public class ViewStudentReport extends javax.swing.JFrame {
 
    
        
  
-
-    void loaditem() {
-    
-            
-           
-        
-
-	try {
-            Map<String,SectionVO>  sectionMap = CoursePlanner.sectionMap;
-            Iterator<SectionVO> iterator = sectionMap.values().iterator();
-		while(iterator.hasNext()){
-                    SectionVO sectionVO = iterator.next();
-                     s2.addRow(new Object[]{sectionVO.getCourse(), sectionVO.getSectionNumber(), sectionVO.getFaculty()
-                    });
-	       
-		}
-
-	     }catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    
-    void loaditemFromSheet() {
+void load1() {
         try {
+  
+            int j = 0;
+             Object plan[] = new Object[1];
+            plan[0] = "2016/2017";
+            jComboBox2.removeAllItems();
+            AutoCompleteSupport support = AutoCompleteSupport.install(
+                    jComboBox2, GlazedLists.eventListOf(plan));
+                Object degree[] = new Object[CoursePlanner.degreeMap.size()];
+            Iterator<String> deg = CoursePlanner.degreeMap.keySet().iterator();
+            while (deg.hasNext()) {
+                degree[j] = deg.next();
+                j++;
+            }
+            jComboBox3.removeAllItems();
+            AutoCompleteSupport support2 = AutoCompleteSupport.install(
+                    jComboBox3, GlazedLists.eventListOf(degree));
+            Object semester[] = new Object[6];
+
+            semester[0] = "2016SP";
+            semester[1] = "2016SU";
+            semester[2] = "2016FA";
+            semester[3] = "2017SP";
+            semester[4] = "2017SU";
+            semester[5] = "2017FA";
+
+            jComboBox1.removeAllItems();
+            AutoCompleteSupport support3 = AutoCompleteSupport.install(
+                    jComboBox1, GlazedLists.eventListOf(semester));
+            s2.addColumn("GradSchool");
+            s2.addColumn("Term");
+            s2.addColumn("Semester");
+            s2.addColumn("Degree");           
+            s2.addColumn("StudentID");
+              s2.addColumn("StudentGradDate");
+                   
+        
            
 
+
+            jTable1.setModel(s2);
+            DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+            dtcr.setHorizontalAlignment(SwingConstants.CENTER);
+            jTable1.getColumnModel().getColumn(0).setCellRenderer(dtcr);
+            jTable1.getColumnModel().getColumn(1).setCellRenderer(dtcr);
+            jTable1.getColumnModel().getColumn(2).setCellRenderer(dtcr);
+            jTable1.getColumnModel().getColumn(3).setCellRenderer(dtcr);
+             jTable1.getColumnModel().getColumn(4).setCellRenderer(dtcr);
+              jTable1.getColumnModel().getColumn(5).setCellRenderer(dtcr);
+              
+           
+          
+           
+           
+         
+
+            jTable1.setAutoResizeMode(jTable1.AUTO_RESIZE_OFF);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(280);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(250);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(280);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(200);
+             jTable1.getColumnModel().getColumn(4).setPreferredWidth(280);
+              jTable1.getColumnModel().getColumn(5).setPreferredWidth(280);
+            
             
            
-            String csvFile = FILEPATH;
-	BufferedReader br = null;
-	String line = "";
-	String cvsSplitBy = ",";
+          
+          
+           
+           
 
-	try {
+            jTable1.getTableHeader().setForeground(new Color(006611));
+            jTable1.setForeground(new Color(006611));
+            String Ta = "Arial";
+            int Bold = 0, size = 18;
+            jTable1.getTableHeader().setFont(new Font(Ta, Bold, size));
 
-		br = new BufferedReader(new FileReader(csvFile));
-		while ((line = br.readLine()) != null) {
-                    String[] input = line.split(cvsSplitBy);
-
-                     s2.addRow(new Object[]{input[0] , input[1], input[2], input[3]});
-
-		       
-		}
-
-	} catch (FileNotFoundException e) {
-		e.printStackTrace();
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
-           }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    
 
-private static String FILEPATH = "";
+      
+    
     /**
      * Creates new form ImportStudents
      */
-    public ViewSections() {
+    public ViewStudentReport() {
 
         initComponents();
        // setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/icon.png")));
@@ -121,8 +157,9 @@ private static String FILEPATH = "";
         this.setSize(maxBounds.width, maxBounds.height);
         WindowClosingEventHandler();
         load1();
-        loaditem();
-   //loaditem();
+        
+        
+      
 
         Timer t = new Timer(1000, new sample());
         t.start();
@@ -178,54 +215,7 @@ private static String FILEPATH = "";
     }
     sample2 s2 = new sample2();
 
-
-     
-    void load1() {
-        try {
-
-            s2.addColumn("Course");
-            s2.addColumn("Section");
-            s2.addColumn("Faculty");
-     
-                   
-        
-           
-
-
-            jTable1.setModel(s2);
-            DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
-            dtcr.setHorizontalAlignment(SwingConstants.CENTER);
-            jTable1.getColumnModel().getColumn(0).setCellRenderer(dtcr);
-            jTable1.getColumnModel().getColumn(1).setCellRenderer(dtcr);
-            jTable1.getColumnModel().getColumn(2).setCellRenderer(dtcr);
-           
-           
-          
-           
-           
-         
-
-            jTable1.setAutoResizeMode(jTable1.AUTO_RESIZE_OFF);
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(400);
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(400);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(400);
-          
-           
-          
-          
-           
-           
-
-            jTable1.getTableHeader().setForeground(new Color(006611));
-            jTable1.setForeground(new Color(006611));
-            String Ta = "Arial";
-            int Bold = 0, size = 18;
-            jTable1.getTableHeader().setFont(new Font(Ta, Bold, size));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    
 
 
 
@@ -240,182 +230,176 @@ private static String FILEPATH = "";
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        tot = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jComboBox3 = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton9 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        tot = new javax.swing.JLabel();
-        jButton10 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jComboBox2 = new javax.swing.JComboBox();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
-
-        jTable1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
-        jTable1.setForeground(new java.awt.Color(0, 102, 255));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Course", "Section Number", "Faculty"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, true
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTable1.setRowHeight(30);
-        jScrollPane1.setViewportView(jTable1);
-
-        getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(30, 172, 1201, 307);
-
-        jButton9.setBackground(new java.awt.Color(57, 53, 53));
-        jButton9.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jButton9.setForeground(new java.awt.Color(255, 255, 255));
-        jButton9.setMnemonic('S');
-        jButton9.setText("Add Section");
-        jButton9.setToolTipText("Alt+S");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton9);
-        jButton9.setBounds(216, 512, 170, 40);
-
-        jButton7.setBackground(new java.awt.Color(57, 53, 53));
-        jButton7.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jButton7.setForeground(new java.awt.Color(255, 255, 255));
-        jButton7.setMnemonic('h');
-        jButton7.setText("Back");
-        jButton7.setToolTipText("Alt+H");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton7);
-        jButton7.setBounds(871, 512, 140, 40);
-
-        jButton8.setBackground(new java.awt.Color(57, 53, 53));
-        jButton8.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jButton8.setForeground(new java.awt.Color(255, 255, 255));
-        jButton8.setMnemonic('r');
-        jButton8.setText("Delete Section");
-        jButton8.setToolTipText("Alt+R");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton8);
-        jButton8.setBounds(661, 512, 158, 40);
 
         tot.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         getContentPane().add(tot);
         tot.setBounds(12, 512, 199, 60);
 
-        jButton10.setBackground(new java.awt.Color(57, 53, 53));
-        jButton10.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jButton10.setForeground(new java.awt.Color(255, 255, 255));
-        jButton10.setMnemonic('r');
-        jButton10.setText("Modify Section");
-        jButton10.setToolTipText("Alt+R");
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
+                jComboBox1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton10);
-        jButton10.setBounds(457, 512, 158, 40);
+        getContentPane().add(jComboBox1);
+        jComboBox1.setBounds(635, 90, 130, 34);
 
-        jLabel1.setText("jLabel1");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(927, 294, 41, 16);
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(51, 51, 255));
-        jLabel2.setText("View Sections");
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel2.setText("Select Semester");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(533, 72, 190, 43);
+        jLabel2.setBounds(510, 80, 124, 46);
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel3.setText("Student Reports");
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(504, 10, 220, 46);
+
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jComboBox3);
+        jComboBox3.setBounds(160, 90, 120, 34);
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel4.setText("Select Term");
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(290, 80, 124, 46);
+
+        jButton2.setBackground(new java.awt.Color(57, 53, 53));
+        jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
+        jButton2.setText("Student Report");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2);
+        jButton2.setBounds(790, 90, 200, 42);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "School", "Term", "Semester", "Degree", "StudentID", "Grad Date"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(50, 170, 1190, 340);
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jComboBox2);
+        jComboBox2.setBounds(385, 90, 120, 34);
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel5.setText("Select Degree");
+        getContentPane().add(jLabel5);
+        jLabel5.setBounds(50, 80, 124, 46);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-
-       AddSection addSection = new AddSection();
-       addSection.setVisible(true);
-        setVisible(false);
-
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton9ActionPerformed
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox3ActionPerformed
 
-        try {
-                        if(!Login.isAdmin){
-                        CoursePlanner me = new CoursePlanner();
-                        me.setVisible(true);
-                        setVisible(false);
-                    }else{
-                             CoursePlannerAdmin me = new CoursePlannerAdmin();
-                        me.setVisible(true);
-                        setVisible(false);
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+ String semester = null;
+        String degree = null;
+        String term = null;
+        if (jComboBox1.getSelectedItem() != null) {
+            semester = jComboBox1.getSelectedItem().toString();
+
+        }
+        if (jComboBox3.getSelectedItem() != null) {
+            degree = jComboBox3.getSelectedItem().toString();
+
+        }
+          if (jComboBox2.getSelectedItem() != null) {
+            term = jComboBox2.getSelectedItem().toString();
+
+        }
+        int j=0;
+        int eligibleStudentCount = 0;
+      
+         Iterator<String> degreeIt = CoursePlanner.degreeMap.keySet().iterator();
+          DegreeVO degreeVO = null;
+        while (degreeIt.hasNext()) {
+            String deg = degreeIt.next();
+            if (deg.equals(degree)) {
+                degreeVO = CoursePlanner.degreeMap.get(deg);               
+            }
+        }
+      
+        Map<String, StudentCourseVO> courseStudentMap = new HashMap<String, StudentCourseVO>();
+        Iterator<StudentVO> iterator = CoursePlanner.studentList.iterator();
+        while (iterator.hasNext()) {
+            StudentVO studentVO = iterator.next();
+            if (studentVO.getDegree().equals(degree)) {
+                Iterator<StudentCourseVO> iterator2 = CoursePlanner.studentCourseList.iterator();
+                while (iterator2.hasNext()) {
+                    StudentCourseVO studentCourseVO = iterator2.next();
+                    if (studentCourseVO.getId().equals(studentVO.getId()) && !courseStudentMap.containsKey(studentCourseVO.getId())) {                        
+                            courseStudentMap.put(studentCourseVO.getId(), studentCourseVO);
+                            s2.addRow(new Object[]{degreeVO.getGradSchool(),  term, semester,studentVO.getDegree(),studentCourseVO.getId(),studentVO.getGradDate()
+                       
+                         });   
                     }
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
+                    }
+                }
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-try {
-            String sectionNumber = jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString() ;
-            int confirmed = JOptionPane.showConfirmDialog(this, "Confirm Delete, Continue ?");
-          if(confirmed==0){
-            CoursePlanner.sectionMap.remove(sectionNumber);
-            ViewSections me = new ViewSections();
-            me.setVisible(true);
-            setVisible(false);
-        }
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton8ActionPerformed
-
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-      try{
-          String sectionNumber = jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString() ;
-          ModifySection section = new ModifySection(sectionNumber);
-          section.setVisible(true);
-          setVisible(false);
-      }catch(Exception e){
-          e.printStackTrace();;
+            }
+        
           
-      }
+ 
+        
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton10ActionPerformed
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -434,13 +418,13 @@ try {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ViewSections.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewStudentReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ViewSections.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewStudentReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ViewSections.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewStudentReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ViewSections.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewStudentReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -2494,18 +2478,20 @@ try {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ViewSections().setVisible(true);
+                new ViewStudentReport().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JComboBox jComboBox2;
+    private javax.swing.JComboBox jComboBox3;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel tot;

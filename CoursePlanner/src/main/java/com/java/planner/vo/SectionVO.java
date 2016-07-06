@@ -11,10 +11,37 @@ package com.java.planner.vo;
  */
 public class SectionVO {
     
-    String course;
+    CourseVO course;
+    String cours;
+    String fac;
     String sectionNumber;
-    String faculty;
+    FacultyVO faculty;
     int headCount;
+    String roomNumber;
+
+    public String getCours() {
+        return cours;
+    }
+
+    public void setCours(String cours) {
+        this.cours = cours;
+    }
+
+    public String getFac() {
+        return fac;
+    }
+
+    public void setFac(String fac) {
+        this.fac = fac;
+    }
+
+    public String getRoomNumber() {
+        return roomNumber;
+    }
+
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
+    }
 
     public int getHeadCount() {
         return headCount;
@@ -24,11 +51,11 @@ public class SectionVO {
         this.headCount = headCount;
     }
 
-    public String getCourse() {
+    public CourseVO getCourse() {
         return course;
     }
 
-    public void setCourse(String course) {
+    public void setCourse(CourseVO course) {
         this.course = course;
     }
 
@@ -40,11 +67,11 @@ public class SectionVO {
         this.sectionNumber = sectionNumber;
     }
 
-    public String getFaculty() {
+    public FacultyVO getFaculty() {
         return faculty;
     }
 
-    public void setFaculty(String faculty) {
+    public void setFaculty(FacultyVO faculty) {
         this.faculty = faculty;
     }
     

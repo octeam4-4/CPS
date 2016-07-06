@@ -16,21 +16,24 @@ public class ScheduleVO {
     
     
     String term;
-    String degree;
+    DegreeVO degree;
+    List<String> roomList;
     String semester;
-    Map<String,Integer> courses;
+   
     String capacity;
     String studentsCount;
+
+    public List<String> getRoomList() {
+        return roomList;
+    }
+
+    public void setRoomList(List<String> roomList) {
+        this.roomList = roomList;
+    }
     Map<String,List<SectionVO>> sections;
     Map<String,List<FacultyVO>> faculty;
 
-    public Map<String, Integer> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(Map<String, Integer> courses) {
-        this.courses = courses;
-    }
+   
 
     public Map<String, List<FacultyVO>> getFaculty() {
         return faculty;
@@ -48,11 +51,11 @@ public class ScheduleVO {
         this.term = term;
     }
 
-    public String getDegree() {
+    public DegreeVO getDegree() {
         return degree;
     }
 
-    public void setDegree(String degree) {
+    public void setDegree(DegreeVO degree) {
         this.degree = degree;
     }
 
@@ -64,13 +67,7 @@ public class ScheduleVO {
         this.semester = semester;
     }
 
-    public Map<String,Integer> getCourse() {
-        return courses;
-    }
-
-    public void setCourse(Map<String,Integer> courses) {
-        this.courses = courses;
-    }
+   
 
     public String getCapacity() {
         return capacity;

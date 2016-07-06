@@ -15,7 +15,6 @@ import com.java.planner.vo.ScheduleVO;
 import com.java.planner.vo.SectionVO;
 import com.java.planner.vo.StudentCourseVO;
 import com.java.planner.vo.StudentVO;
-import com.sun.org.apache.xalan.internal.xsltc.runtime.BasisLibrary;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
@@ -41,11 +40,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -57,68 +54,112 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author sku263
  */
-public class GenerateSchedule extends javax.swing.JFrame {
+public class ViewScheduleReport extends javax.swing.JFrame {
 
-    void loaditem() {
+   
+       
+ 
+void load1() {
+    
+    
+     Object degree[] = new Object[CoursePlanner.degreeMap.size()];
 
-        try {
-            Map<String, CourseVO> courseMap = CoursePlanner.courseMap;
-            Iterator<CourseVO> iterator = courseMap.values().iterator();
-            while (iterator.hasNext()) {
-                CourseVO courseVO = iterator.next();
-                s2.addRow(new Object[]{courseVO.getNumber(), courseVO.getName(), courseVO.getDescription(), courseVO.getNumberOfHours(), courseVO.getCapacity(), courseVO.getAvailbleInfall(), courseVO.getAvailableInSpring(), courseVO.getAvailableInSummer(), courseVO.getPreCourses(), courseVO.getTeachers()});
-
+            int j = 0;
+            Iterator<String> deg = CoursePlanner.degreeMap.keySet().iterator();
+            while (deg.hasNext()) {
+                degree[j] = deg.next();
+                j++;
             }
+            jComboBox3.removeAllItems();
+            AutoCompleteSupport support2 = AutoCompleteSupport.install(
+                    jComboBox3, GlazedLists.eventListOf(degree));
+            Object semester[] = new Object[6];
+
+            semester[0] = "2016SP";
+            semester[1] = "2016SU";
+            semester[2] = "2016FA";
+            semester[3] = "2017SP";
+            semester[4] = "2017SU";
+            semester[5] = "2017FA";
+
+            jComboBox1.removeAllItems();
+            AutoCompleteSupport support3 = AutoCompleteSupport.install(
+                    jComboBox1, GlazedLists.eventListOf(semester));
+        try {
+
+            s2.addColumn("GradSchool");
+          
+            s2.addColumn("Semester");
+            s2.addColumn("Degree");
+             s2.addColumn("Course");
+            s2.addColumn("Section");
+            s2.addColumn("Faculty");
+           
+                   
+        
+           
+
+
+            jTable1.setModel(s2);
+            DefaultTableCellRenderer dtcr = new DefaultTableCellRenderer();
+            dtcr.setHorizontalAlignment(SwingConstants.CENTER);
+            jTable1.getColumnModel().getColumn(0).setCellRenderer(dtcr);
+            jTable1.getColumnModel().getColumn(1).setCellRenderer(dtcr);
+            jTable1.getColumnModel().getColumn(2).setCellRenderer(dtcr);
+            jTable1.getColumnModel().getColumn(3).setCellRenderer(dtcr);
+               jTable1.getColumnModel().getColumn(4).setCellRenderer(dtcr);
+            jTable1.getColumnModel().getColumn(5).setCellRenderer(dtcr);
+          
+
+           
+          
+           
+           
+         
+
+            jTable1.setAutoResizeMode(jTable1.AUTO_RESIZE_OFF);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(280);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(250);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(280);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(200);
+             jTable1.getColumnModel().getColumn(4).setPreferredWidth(280);
+            jTable1.getColumnModel().getColumn(5).setPreferredWidth(250);
+       
+            
+           
+          
+          
+           
+           
+
+            jTable1.getTableHeader().setForeground(new Color(006611));
+            jTable1.setForeground(new Color(006611));
+            String Ta = "Arial";
+            int Bold = 0, size = 18;
+            jTable1.getTableHeader().setFont(new Font(Ta, Bold, size));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    
 
-    void loaditemFromSheet() {
-        try {
-
-            String csvFile = FILEPATH;
-            BufferedReader br = null;
-            String line = "";
-            String cvsSplitBy = ",";
-
-            try {
-
-                br = new BufferedReader(new FileReader(csvFile));
-                while ((line = br.readLine()) != null) {
-                    String[] input = line.split(cvsSplitBy);
-
-                    s2.addRow(new Object[]{input[0], input[1], input[2], input[3], input[4], input[5], input[6], input[7], input[8], input[9]});
-
-                }
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static String FILEPATH = "";
-
+      
+    
     /**
      * Creates new form ImportStudents
      */
-    public GenerateSchedule() {
+    public ViewScheduleReport() {
 
         initComponents();
-        // setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/icon.png")));
+       // setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/icon.png")));
         Rectangle maxBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().
                 getMaximumWindowBounds();
         this.setSize(maxBounds.width, maxBounds.height);
         WindowClosingEventHandler();
         load1();
-        loaditem();
-        //loaditem();
+        
+      
 
         Timer t = new Timer(1000, new sample());
         t.start();
@@ -141,9 +182,15 @@ public class GenerateSchedule extends javax.swing.JFrame {
                 int confirmed = JOptionPane.showConfirmDialog(null, "Are you sure want redirect to home?", "Redirect to home page", JOptionPane.YES_NO_OPTION);
                 if (confirmed == JOptionPane.YES_OPTION) {
                     try {
+                        if(!Login.isAdmin){
                         CoursePlanner me = new CoursePlanner();
                         me.setVisible(true);
                         setVisible(false);
+                    }else{
+                             CoursePlannerAdmin me = new CoursePlannerAdmin();
+                        me.setVisible(true);
+                        setVisible(false);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -168,39 +215,11 @@ public class GenerateSchedule extends javax.swing.JFrame {
     }
     sample2 s2 = new sample2();
 
-    void load1() {
-        try {
+    
 
-          
-           Object degree[] = new Object[CoursePlanner.degreeMap.size()];
 
-            int j = 0;
-            Iterator<String> deg = CoursePlanner.degreeMap.keySet().iterator();
-            while (deg.hasNext()) {
-                degree[j] = deg.next();
-                j++;
-            }
-            jComboBox3.removeAllItems();
-            AutoCompleteSupport support2 = AutoCompleteSupport.install(
-                    jComboBox3, GlazedLists.eventListOf(degree));
 
-          
-            Object semester[] = new Object[6];
-
-            semester[0] = "2016SP";
-            semester[1] = "2016SU";
-            semester[2] = "2016FA";
-            semester[3] = "2017SP";
-            semester[4] = "2017SU";
-            semester[5] = "2017FA";
-
-            jComboBox1.removeAllItems();
-            AutoCompleteSupport support3 = AutoCompleteSupport.install(
-                    jComboBox1, GlazedLists.eventListOf(semester));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+      
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -212,11 +231,14 @@ public class GenerateSchedule extends javax.swing.JFrame {
     private void initComponents() {
 
         tot = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jComboBox3 = new javax.swing.JComboBox();
+        jLabel4 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jButton7 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -226,18 +248,6 @@ public class GenerateSchedule extends javax.swing.JFrame {
         getContentPane().add(tot);
         tot.setBounds(12, 512, 199, 60);
 
-        jButton1.setBackground(new java.awt.Color(57, 53, 53));
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Generate Schedule");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton1);
-        jButton1.setBounds(80, 450, 181, 42);
-
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -245,17 +255,18 @@ public class GenerateSchedule extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jComboBox1);
-        jComboBox1.setBounds(228, 308, 165, 34);
+        jComboBox1.setBounds(580, 90, 165, 34);
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabel2.setText("Select Semester");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(47, 302, 124, 46);
+        jLabel2.setBounds(420, 80, 124, 46);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel3.setText("Select Degree");
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel3.setText("Schedule Report");
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(47, 179, 124, 46);
+        jLabel3.setBounds(600, 10, 230, 46);
 
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         jComboBox3.addActionListener(new java.awt.event.ActionListener() {
@@ -264,10 +275,51 @@ public class GenerateSchedule extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jComboBox3);
-        jComboBox3.setBounds(228, 194, 165, 34);
+        jComboBox3.setBounds(210, 90, 165, 34);
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel4.setText("Select Degree");
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(90, 80, 124, 46);
+
+        jButton2.setBackground(new java.awt.Color(57, 53, 53));
+        jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
+        jButton2.setText("Schedule Report");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2);
+        jButton2.setBounds(790, 90, 200, 42);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "School", "Term", "Semester", "Degree", "Course Number", "Section", "Faculty"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(40, 190, 1190, 340);
 
         jButton7.setBackground(new java.awt.Color(57, 53, 53));
-        jButton7.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jButton7.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jButton7.setForeground(new java.awt.Color(255, 255, 255));
         jButton7.setMnemonic('h');
         jButton7.setText("Back");
@@ -278,7 +330,7 @@ public class GenerateSchedule extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton7);
-        jButton7.setBounds(330, 450, 150, 42);
+        jButton7.setBounds(610, 560, 140, 40);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -287,8 +339,12 @@ public class GenerateSchedule extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String semester = null;
+    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+ String semester = null;
         String degree = null;
         String term = null;
         if (jComboBox1.getSelectedItem() != null) {
@@ -299,7 +355,6 @@ public class GenerateSchedule extends javax.swing.JFrame {
             degree = jComboBox3.getSelectedItem().toString();
 
         }
-        
         int j=0;
         int eligibleStudentCount = 0;
         ScheduleVO scheduleVO = new ScheduleVO();
@@ -321,7 +376,7 @@ public class GenerateSchedule extends javax.swing.JFrame {
                 Iterator<StudentCourseVO> iterator2 = CoursePlanner.studentCourseList.iterator();
                 while (iterator2.hasNext()) {
                     StudentCourseVO studentCourseVO = iterator2.next();
-                    if (studentCourseVO.getId().equals(studentVO.getId()) && studentCourseVO.getSemester().equals(semester)) {
+                    if (studentCourseVO.getId().equals(studentVO.getId())) {
                         if (courseStudentMap.containsKey(studentCourseVO.getCourseNumber())) {
                             int studentCount = courseStudentMap.get(studentCourseVO.getCourseNumber());
                             studentCount++;
@@ -346,9 +401,12 @@ public class GenerateSchedule extends javax.swing.JFrame {
             Map<String, List<FacultyVO>> facultyMap = new HashMap<String, List<FacultyVO>>();
            Integer sectionNumber = 0;
         while (coursesInDegree.hasNext()) {
-            Entry<String, Integer> entry = coursesInDegree.next();
+            Map.Entry<String, Integer> entry = coursesInDegree.next();
             String courseNumber = entry.getKey();
             CourseVO courseVO = CoursePlanner.courseMap.get(courseNumber);
+            if(courseVO==null){
+                continue;
+            }
             scheduleVO.setCapacity(courseVO.getCapacity());
             int studentCount = entry.getValue();
            
@@ -500,24 +558,37 @@ public class GenerateSchedule extends javax.swing.JFrame {
                     }
                     }
                 
-            
-
         }
 
-        ViewSchedule viewSchedule = new ViewSchedule(scheduleVO);
-        viewSchedule.setVisible(true);
-        setVisible(false);
-// TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+                   Map<String, List<SectionVO>> courseSections = scheduleVO.getSections();
+         Iterator<Map.Entry<String,List<SectionVO>>> iterator3 = courseSections.entrySet().iterator();
+       while(iterator3.hasNext()){
+             Map.Entry<String,List<SectionVO>> course = iterator3.next();
+           
+             List<SectionVO> sections = course.getValue();
+             Iterator<SectionVO> sectionIt = sections.iterator();
+            while(sectionIt.hasNext()){
+                 SectionVO sec = sectionIt.next(); 
+                   String facultyName = sec.getFaculty()!=null ? sec.getFaculty().getLastName()+ "," + sec.getFaculty().getFirstName() :"To Be Announced/NA";
+                   
+                   s2.addRow(new Object[]{scheduleVO.getDegree().getGradSchool(),  scheduleVO.getSemester(),
+                       scheduleVO.getDegree().getDegreeCode(),sec.getCourse().getNumber(),sec.getSectionNumber(),
+                       facultyName
+                         });
+             }
+       }
+        
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
 
         try {
-            if (!Login.isAdmin) {
+            if(!Login.isAdmin){
                 CoursePlanner me = new CoursePlanner();
                 me.setVisible(true);
                 setVisible(false);
-            } else {
+            }else{
                 CoursePlannerAdmin me = new CoursePlannerAdmin();
                 me.setVisible(true);
                 setVisible(false);
@@ -527,10 +598,6 @@ public class GenerateSchedule extends javax.swing.JFrame {
         }
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
-
-    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -549,14 +616,526 @@ public class GenerateSchedule extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GenerateSchedule.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewScheduleReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GenerateSchedule.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewScheduleReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GenerateSchedule.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewScheduleReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GenerateSchedule.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewScheduleReport.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -1073,18 +1652,21 @@ public class GenerateSchedule extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GenerateSchedule().setVisible(true);
+                new ViewScheduleReport().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton7;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JComboBox jComboBox3;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JLabel tot;
     // End of variables declaration//GEN-END:variables
 }

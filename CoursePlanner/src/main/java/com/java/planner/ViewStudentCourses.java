@@ -43,7 +43,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author sku263
  */
-public class ImportStudentCourses extends javax.swing.JFrame {
+public class ViewStudentCourses extends javax.swing.JFrame {
 
     public class ExcelSheetReader {
 
@@ -103,7 +103,7 @@ public class ImportStudentCourses extends javax.swing.JFrame {
     /**
      * Creates new form ImportStudents
      */
-    public ImportStudentCourses() {
+    public ViewStudentCourses() {
 
         initComponents();
        // setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/icon.png")));
@@ -138,7 +138,13 @@ void load() {
             Iterator<StudentCourseVO> iterator = CoursePlanner.studentCourseList.iterator();
 		while(iterator.hasNext()){
                     StudentCourseVO StudentCourseVO = iterator.next();
-                     s2.addRow(new Object[]{StudentCourseVO.getId() , StudentCourseVO.getCourseNumber(), StudentCourseVO.getDesc().substring(0,10),StudentCourseVO.getSemester(), StudentCourseVO.getGrade()
+                     String desc = null;
+                    if(StudentCourseVO.getDesc().length()>10){
+                    	desc = StudentCourseVO.getDesc().substring(0, 9);
+                    }
+                    else
+                    	desc =StudentCourseVO.getDesc();
+                     s2.addRow(new Object[]{StudentCourseVO.getId() , StudentCourseVO.getCourseNumber(), desc,StudentCourseVO.getSemester(), StudentCourseVO.getGrade()
                        });
 	       
 		}
@@ -154,9 +160,15 @@ void load() {
                 int confirmed = JOptionPane.showConfirmDialog(null, "Are you sure want redirect to home?", "Redirect to home page", JOptionPane.YES_NO_OPTION);
                 if (confirmed == JOptionPane.YES_OPTION) {
                     try {
+                        if(!Login.isAdmin){
                         CoursePlanner me = new CoursePlanner();
                         me.setVisible(true);
                         setVisible(false);
+                    }else{
+                             CoursePlannerAdmin me = new CoursePlannerAdmin();
+                        me.setVisible(true);
+                        setVisible(false);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -204,11 +216,11 @@ void load() {
          
 
             jTable1.setAutoResizeMode(jTable1.AUTO_RESIZE_OFF);
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(280);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(250);
             jTable1.getColumnModel().getColumn(1).setPreferredWidth(250);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(280);
-            jTable1.getColumnModel().getColumn(3).setPreferredWidth(200);
-             jTable1.getColumnModel().getColumn(4).setPreferredWidth(200);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(250);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(250);
+             jTable1.getColumnModel().getColumn(4).setPreferredWidth(250);
 
             jTable1.getTableHeader().setForeground(new Color(006611));
             jTable1.setForeground(new Color(006611));
@@ -250,10 +262,14 @@ JOptionPane.showMessageDialog(this, "Student Course Data Saved");
         jButton10 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
         tot = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jButton12 = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
 
         jTable1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jTable1.setForeground(new java.awt.Color(0, 102, 255));
@@ -279,19 +295,24 @@ JOptionPane.showMessageDialog(this, "Student Course Data Saved");
         jTable1.setRowHeight(30);
         jScrollPane1.setViewportView(jTable1);
 
-        jButton10.setBackground(new java.awt.Color(153, 0, 0));
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(50, 110, 1010, 372);
+
+        jButton10.setBackground(new java.awt.Color(0, 102, 51));
         jButton10.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jButton10.setForeground(new java.awt.Color(255, 255, 255));
         jButton10.setMnemonic('B');
-        jButton10.setText("Import Student Course data");
+        jButton10.setText("Import  StudentCourse data");
         jButton10.setToolTipText("Alt+b");
         jButton10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton10ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton10);
+        jButton10.setBounds(570, 510, 250, 40);
 
-        jButton9.setBackground(new java.awt.Color(153, 0, 0));
+        jButton9.setBackground(new java.awt.Color(255, 51, 51));
         jButton9.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jButton9.setForeground(new java.awt.Color(255, 255, 255));
         jButton9.setMnemonic('S');
@@ -302,79 +323,77 @@ JOptionPane.showMessageDialog(this, "Student Course Data Saved");
                 jButton9ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton9);
+        jButton9.setBounds(840, 510, 140, 40);
 
-        jButton7.setBackground(new java.awt.Color(153, 0, 0));
+        jButton7.setBackground(new java.awt.Color(57, 53, 53));
         jButton7.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jButton7.setForeground(new java.awt.Color(255, 255, 255));
         jButton7.setMnemonic('h');
-        jButton7.setText("Home");
+        jButton7.setText("Back");
         jButton7.setToolTipText("Alt+H");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton7);
+        jButton7.setBounds(990, 510, 140, 40);
 
-        jButton8.setBackground(new java.awt.Color(153, 0, 0));
+        tot.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        getContentPane().add(tot);
+        tot.setBounds(12, 516, 199, 60);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(51, 0, 51));
+        jLabel1.setText("View Student Course Data");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(300, 36, 390, 30);
+
+        jButton12.setBackground(new java.awt.Color(57, 53, 53));
+        jButton12.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jButton12.setForeground(new java.awt.Color(255, 255, 255));
+        jButton12.setMnemonic('S');
+        jButton12.setText("Add Student Courses");
+        jButton12.setToolTipText("Alt+S");
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton12);
+        jButton12.setBounds(30, 510, 170, 40);
+
+        jButton11.setBackground(new java.awt.Color(57, 53, 53));
+        jButton11.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jButton11.setForeground(new java.awt.Color(255, 255, 255));
+        jButton11.setMnemonic('r');
+        jButton11.setText("Modify Student Courses");
+        jButton11.setToolTipText("Alt+R");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton11);
+        jButton11.setBounds(220, 510, 158, 40);
+
+        jButton8.setBackground(new java.awt.Color(57, 53, 53));
         jButton8.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jButton8.setForeground(new java.awt.Color(255, 255, 255));
         jButton8.setMnemonic('r');
-        jButton8.setText("Refresh");
+        jButton8.setText("Delete Student Courses");
         jButton8.setToolTipText("Alt+R");
         jButton8.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton8ActionPerformed(evt);
             }
         });
-
-        tot.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(tot, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(13, 13, 13)
-                .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21)
-                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1004, 1004, 1004))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1010, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tot, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(33, 33, 33))
-        );
+        getContentPane().add(jButton8);
+        jButton8.setBounds(400, 510, 158, 40);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-
-        JFileChooser j = new JFileChooser();
-        j.showOpenDialog(this);
-        FILEPATH = j.getSelectedFile().getPath();
-        loaditem();
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
 
@@ -385,26 +404,77 @@ JOptionPane.showMessageDialog(this, "Student Course Data Saved");
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
 
-        try {
-            CoursePlanner me = new CoursePlanner();
-            me.setVisible(true);
-            setVisible(false);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+         try {
+                        if(!Login.isAdmin){
+                        CoursePlanner me = new CoursePlanner();
+                        me.setVisible(true);
+                        setVisible(false);
+                    }else{
+                             CoursePlannerAdmin me = new CoursePlannerAdmin();
+                        me.setVisible(true);
+                        setVisible(false);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+
+        JFileChooser j = new JFileChooser();
+        j.showOpenDialog(this);
+        FILEPATH = j.getSelectedFile().getPath();
+        loaditem();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+
+        AddStudentCourses ast = new AddStudentCourses();
+        ast.setVisible(true);
+        setVisible(false);
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton12ActionPerformed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        try{
+            String id = jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString();
+            String course =  jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString();
+            ModifyStudentCourses std = new ModifyStudentCourses(id,course);
+            std.setVisible(true);
+            setVisible(false);
+        }catch(Exception e){
+            e.printStackTrace();;
+
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
 
         try {
-            ImportStudentCourses me = new ImportStudentCourses();
+            String id = jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString();
+            String  course = jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString();
+           int confirmed = JOptionPane.showConfirmDialog(this, "Confirm Delete, Continue ?");
+            Iterator<StudentCourseVO> it = CoursePlanner.studentCourseList.iterator();
+            while(it.hasNext()){
+                StudentCourseVO studentVO = it.next();
+                if(id.equals(studentVO.getId()) && course.equals(studentVO.getCourseNumber())){
+                    if(confirmed==0){
+                        CoursePlanner.studentCourseList.remove(studentVO);
+
+                        break;
+                    }
+                }
+            }
+            ViewStudentCourses me = new ViewStudentCourses();
             me.setVisible(true);
             setVisible(false);
-        } catch (Exception e) {
+        }catch (Exception e) {
             e.printStackTrace();
         }
-
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton8ActionPerformed
 
@@ -425,14 +495,78 @@ JOptionPane.showMessageDialog(this, "Student Course Data Saved");
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ImportStudentCourses.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewStudentCourses.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ImportStudentCourses.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewStudentCourses.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ImportStudentCourses.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewStudentCourses.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ImportStudentCourses.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ViewStudentCourses.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -501,16 +635,19 @@ JOptionPane.showMessageDialog(this, "Student Course Data Saved");
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ImportStudentCourses().setVisible(true);
+                new ViewStudentCourses().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel tot;

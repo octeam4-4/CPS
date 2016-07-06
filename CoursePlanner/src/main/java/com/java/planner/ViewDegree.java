@@ -64,7 +64,7 @@ public class ViewDegree extends javax.swing.JFrame {
             Iterator<DegreeVO> iterator = degreeMap.values().iterator();
 		while(iterator.hasNext()){
                     DegreeVO degreeVO = iterator.next();
-                     s2.addRow(new Object[]{degreeVO.getDegreeCode(), degreeVO.getDegreeName(), degreeVO.getGradSchool(),
+                     s2.addRow(new Object[]{degreeVO.getDegreeCode(),  degreeVO.getGradSchool(),degreeVO.getDegreeName(),
                          degreeVO.getForecast()});
 	       
 		}
@@ -144,9 +144,15 @@ private static String FILEPATH = "";
                 int confirmed = JOptionPane.showConfirmDialog(null, "Are you sure want redirect to home?", "Redirect to home page", JOptionPane.YES_NO_OPTION);
                 if (confirmed == JOptionPane.YES_OPTION) {
                     try {
+                        if(!Login.isAdmin){
                         CoursePlanner me = new CoursePlanner();
                         me.setVisible(true);
                         setVisible(false);
+                    }else{
+                             CoursePlannerAdmin me = new CoursePlannerAdmin();
+                        me.setVisible(true);
+                        setVisible(false);
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -181,7 +187,7 @@ private static String FILEPATH = "";
                  CoursePlanner.degreeMap.remove(iterator.next());
                 }
             
-for(int i=1;i<jTable1.getRowCount();i++)
+for(int i=1;i<-jTable1.getRowCount();i++)
 { 
     DegreeVO degreeVO = new DegreeVO();
     degreeVO.setDegreeCode((String) jTable1.getValueAt(i, 0));
@@ -200,8 +206,8 @@ JOptionPane.showMessageDialog(this, "Degree Data Saved");
         try {
 
             s2.addColumn("Degree Code");
-            s2.addColumn("Degree Name");
-            s2.addColumn("Grad School");
+             s2.addColumn("Grad School");
+            s2.addColumn("Degree Name");           
             s2.addColumn("Forecast");
                    
         
@@ -222,10 +228,10 @@ JOptionPane.showMessageDialog(this, "Degree Data Saved");
          
 
             jTable1.setAutoResizeMode(jTable1.AUTO_RESIZE_OFF);
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(280);
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(250);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(280);
-            jTable1.getColumnModel().getColumn(3).setPreferredWidth(200);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(300);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(300);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(300);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(300);
            
           
           
@@ -261,12 +267,13 @@ JOptionPane.showMessageDialog(this, "Degree Data Saved");
         jButton9 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
-        tot = new javax.swing.JLabel();
         jButton10 = new javax.swing.JButton();
         jButton11 = new javax.swing.JButton();
         jButton12 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
 
         jTable1.setFont(new java.awt.Font("Arial", 0, 18)); // NOI18N
         jTable1.setForeground(new java.awt.Color(0, 102, 255));
@@ -284,22 +291,24 @@ JOptionPane.showMessageDialog(this, "Degree Data Saved");
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
-            boolean[] canEdit = new boolean [] {
-                false, false, true, true
-            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
         });
         jTable1.setRowHeight(30);
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(350);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(350);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(350);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(350);
+        }
 
-        jButton9.setBackground(new java.awt.Color(153, 0, 0));
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(30, 172, 1201, 307);
+
+        jButton9.setBackground(new java.awt.Color(57, 53, 53));
         jButton9.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jButton9.setForeground(new java.awt.Color(255, 255, 255));
         jButton9.setMnemonic('S');
@@ -310,8 +319,10 @@ JOptionPane.showMessageDialog(this, "Degree Data Saved");
                 jButton9ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton9);
+        jButton9.setBounds(460, 510, 170, 40);
 
-        jButton7.setBackground(new java.awt.Color(153, 0, 0));
+        jButton7.setBackground(new java.awt.Color(57, 53, 53));
         jButton7.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jButton7.setForeground(new java.awt.Color(255, 255, 255));
         jButton7.setMnemonic('h');
@@ -322,8 +333,10 @@ JOptionPane.showMessageDialog(this, "Degree Data Saved");
                 jButton7ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton7);
+        jButton7.setBounds(1090, 510, 140, 40);
 
-        jButton8.setBackground(new java.awt.Color(153, 0, 0));
+        jButton8.setBackground(new java.awt.Color(57, 53, 53));
         jButton8.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jButton8.setForeground(new java.awt.Color(255, 255, 255));
         jButton8.setMnemonic('r');
@@ -334,10 +347,10 @@ JOptionPane.showMessageDialog(this, "Degree Data Saved");
                 jButton8ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton8);
+        jButton8.setBounds(890, 510, 158, 40);
 
-        tot.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-
-        jButton10.setBackground(new java.awt.Color(153, 0, 0));
+        jButton10.setBackground(new java.awt.Color(57, 53, 53));
         jButton10.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jButton10.setForeground(new java.awt.Color(255, 255, 255));
         jButton10.setMnemonic('r');
@@ -348,6 +361,8 @@ JOptionPane.showMessageDialog(this, "Degree Data Saved");
                 jButton10ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton10);
+        jButton10.setBounds(670, 510, 158, 40);
 
         jButton11.setBackground(new java.awt.Color(255, 51, 51));
         jButton11.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
@@ -360,6 +375,8 @@ JOptionPane.showMessageDialog(this, "Degree Data Saved");
                 jButton11ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton11);
+        jButton11.setBounds(250, 510, 170, 40);
 
         jButton12.setBackground(new java.awt.Color(0, 102, 51));
         jButton12.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
@@ -372,53 +389,14 @@ JOptionPane.showMessageDialog(this, "Degree Data Saved");
                 jButton12ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton12);
+        jButton12.setBounds(40, 510, 170, 40);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(tot, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(71, 71, 71)
-                        .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(46, 46, 46)
-                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(52, 52, 52)
-                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(109, 109, 109)
-                        .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(168, 168, 168)
-                        .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1201, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(665, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(99, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tot, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(33, 33, 33))
-        );
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel1.setText("View Degree");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(501, 36, 210, 40);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -434,13 +412,19 @@ JOptionPane.showMessageDialog(this, "Degree Data Saved");
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
 
-        try {
-            CoursePlanner me = new CoursePlanner();
-            me.setVisible(true);
-            setVisible(false);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+         try {
+                        if(!Login.isAdmin){
+                        CoursePlanner me = new CoursePlanner();
+                        me.setVisible(true);
+                        setVisible(false);
+                    }else{
+                             CoursePlannerAdmin me = new CoursePlannerAdmin();
+                        me.setVisible(true);
+                        setVisible(false);
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
 
@@ -1551,8 +1535,8 @@ JOptionPane.showMessageDialog(this, "Degree Data Saved");
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JLabel tot;
     // End of variables declaration//GEN-END:variables
 }

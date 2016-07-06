@@ -6,6 +6,7 @@
 package com.java.planner;
 
 import com.java.planner.vo.CourseVO;
+import com.java.planner.vo.DegreePlanVO;
 import com.java.planner.vo.DegreeVO;
 import com.java.planner.vo.FacultyVO;
 import com.java.planner.vo.RoomVO;
@@ -13,10 +14,16 @@ import com.java.planner.vo.SectionVO;
 import com.java.planner.vo.StudentCourseVO;
 import com.java.planner.vo.StudentVO;
 import com.java.planner.vo.UserVO;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 /**
  *
@@ -39,7 +46,237 @@ public class CoursePlannerAdmin extends javax.swing.JFrame {
      */
     public CoursePlannerAdmin() {
         initComponents();
+      //  loadStudents();
+      //  loadStudentCourses();
+        loadCourses();
+        loadDegree();
+        loadFaculty();
+        loadDegreePlan();
     }
+
+    
+
+	  private void loadStudents(){
+	        BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ",";
+
+		try {
+
+			br = new BufferedReader(new FileReader("STU.DUMP.csv"));
+			br.readLine();
+			while ((line = br.readLine()) != null) {
+	                    String[] input = line.split(cvsSplitBy);
+	                    
+	                    
+	                    StudentVO studentVO = new StudentVO();
+	                    studentVO.setId(input[0]);
+	                     studentVO.setDegree(input[1]);
+	                      studentVO.setGradDate(input[2]);
+	                    
+	                       CoursePlanner.studentList.add(studentVO);
+			       
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+	
+	           }catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	  }
+	  
+	  private void loadStudentCourses(){
+        BufferedReader br = null;
+	String line = "";
+	String cvsSplitBy = ",";
+
+	try {
+
+		br = new BufferedReader(new FileReader("STC.DUMP.csv"));
+		br.readLine();
+		while ((line = br.readLine()) != null) {
+                    String[] input = line.split(cvsSplitBy);
+                    
+                    
+                    StudentCourseVO studentVO = new StudentCourseVO();
+                    studentVO.setId(input[0]);
+                     studentVO.setCourseNumber(input[1]);
+                      studentVO.setSemester(input[2]);
+                      studentVO.setDesc(input[3]);
+                      studentVO.setGrade(input[4]);
+                    
+                       CoursePlanner.studentCourseList.add(studentVO);
+		       
+		}
+
+	} catch (FileNotFoundException e) {
+		e.printStackTrace();
+	} catch (IOException e) {
+
+           }catch (Exception e) {
+            e.printStackTrace();
+        }
+  }
+
+	  private void loadCourses(){
+	        BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ",";
+
+		try {
+
+			br = new BufferedReader(new FileReader("TestDataCourses.csv"));
+			br.readLine();
+			while ((line = br.readLine()) != null) {
+	                    String[] input = line.split(cvsSplitBy);
+	                    
+	                    
+	                    CourseVO courseVO = new CourseVO();
+	                   courseVO.setNumber(input[0]);
+	                   courseVO.setName(input[1]);
+	                   courseVO.setDescription(input[2]);
+	                   courseVO.setNumberOfHours(input[3]);
+	                   courseVO.setCapacity(input[4]);
+	                   courseVO.setAvailbleInfall(input[5]);
+	                   courseVO.setAvailableInSummer(input[7]);
+	                   courseVO.setAvailableInSpring(input[6]);
+	                   courseVO.setPreCourses(input[8]);
+	                   courseVO.setTeachers(input[9]);
+	                   CoursePlanner.courseMap.put(courseVO.getNumber(), courseVO);
+			       
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+	
+	           }catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	  }
+
+	  private void loadDegree(){
+        BufferedReader br = null;
+	String line = "";
+	String cvsSplitBy = ",";
+
+	try {
+
+		br = new BufferedReader(new FileReader("TestDataDegrees.csv"));
+		br.readLine();
+		while ((line = br.readLine()) != null) {
+                    String[] input = line.split(cvsSplitBy);
+                    
+                    
+                  DegreeVO degreeVO = new DegreeVO();
+                degreeVO.setDegreeCode(input[0]);
+                degreeVO.setDegreeName(input[1]);
+                degreeVO.setGradSchool(input[2]);
+                degreeVO.setForecast(input[3]);   
+                   CoursePlanner.degreeMap.put(degreeVO.getDegreeCode(), degreeVO);
+		       
+		}
+
+	} catch (FileNotFoundException e) {
+		e.printStackTrace();
+	} catch (IOException e) {
+
+           }catch (Exception e) {
+            e.printStackTrace();
+        }
+  }
+
+	  
+	  private void loadFaculty(){
+	        BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ",";
+
+		try {
+
+			br = new BufferedReader(new FileReader("TestDataFaculty.csv"));
+			br.readLine();
+			while ((line = br.readLine()) != null) {
+	                    String[] input = line.split(cvsSplitBy);
+	                    
+	                    
+	                  FacultyVO facultyVO = new FacultyVO();
+	                  facultyVO.setLastName(input[0]);
+	                  facultyVO.setFirstName(input[1]);
+	                  facultyVO.setGradSchool(input[2]);
+	                  facultyVO.setDegree(input[3]);   
+	                  facultyVO.setTitle(input[4]);
+	                  facultyVO.setDyasToTeach(input[5]);
+	                  facultyVO.setMaxLoadfall(input[6]);
+	                  facultyVO.setMaxLoadSpring(input[7]);
+	                   facultyVO.setMaxLoadSummer(input[8]);
+	                  CoursePlanner.facultyMap.put(facultyVO.getLastName()+facultyVO.getFirstName(), facultyVO);
+	                   
+			       
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+	
+	           }catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	  }
+
+	  
+	  private void loadDegreePlan(){
+	        BufferedReader br = null;
+		String line = "";
+		String cvsSplitBy = ",";
+
+		try {
+
+			br = new BufferedReader(new FileReader("TestDataDegreePlanReq.csv"));
+			br.readLine();
+			while ((line = br.readLine()) != null) {
+	                    String[] input = line.split(cvsSplitBy);    	                    
+	                    
+	                  DegreePlanVO degreeVO = new DegreePlanVO();
+	                  degreeVO.setDegreeCode(input[0]);
+	                  degreeVO.setDepartment(input[1]);
+	                  degreeVO.setElectiveHrs(input[2]);
+	                  degreeVO.setRequiredHrs(input[3]);  
+	                  degreeVO.seteCourseAppended(input[4]);
+	                  degreeVO.setrCoursesAppended(input[5]);
+	                  String electiveCourses = input[2];
+	                  List<String> eCourses = new ArrayList<String>();
+               	 
+	                  if(electiveCourses!=null ){
+	                	  StringTokenizer tokenizer = new StringTokenizer(electiveCourses, "|");
+	                      while(tokenizer.hasMoreTokens()){
+	                		  eCourses.add(tokenizer.nextToken());
+	                	  }
+	                  }
+	                  degreeVO.setElectiveCourses(eCourses);
+	                  List<String> rCourses = new ArrayList<String>();  	                	
+	                  String requiredCourses = input[4];
+	                  if(requiredCourses!=null ){
+	                	  StringTokenizer tokenizer = new StringTokenizer(requiredCourses, "|");
+	                    while(tokenizer.hasMoreTokens()){
+	                		  rCourses.add(tokenizer.nextToken());
+	                	  }
+	                  }
+	                  degreeVO.setRequiredCourses(rCourses);
+	                 
+	                   CoursePlanner.planMap.put(degreeVO.getDegreeCode(), degreeVO);
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+	
+	           }catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	  }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -52,6 +289,7 @@ public class CoursePlannerAdmin extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -76,7 +314,8 @@ public class CoursePlannerAdmin extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 0, 102));
         jLabel1.setText("Welcome Admin");
 
         jButton1.setBackground(new java.awt.Color(255, 51, 51));
@@ -87,6 +326,10 @@ public class CoursePlannerAdmin extends javax.swing.JFrame {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(12, 51, 118));
+        jLabel2.setText("@2016");
 
         jMenuBar1.setBackground(new java.awt.Color(0, 204, 204));
         jMenuBar1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -270,27 +513,34 @@ public class CoursePlannerAdmin extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(453, 453, 453)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 325, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(405, 405, 405)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(359, 359, 359)
+                .addComponent(jButton1))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(507, Short.MAX_VALUE))
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 355, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-      ImportStudents importStudents = new ImportStudents();
+      ViewStudents importStudents = new ViewStudents();
 importStudents.setVisible(true);
   setVisible(false);
         // TODO add your handling code here:
@@ -299,7 +549,7 @@ importStudents.setVisible(true);
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
   
-        ImportStudentCourses importStudents = new ImportStudentCourses();
+        ViewStudentCourses importStudents = new ViewStudentCourses();
 importStudents.setVisible(true);
   setVisible(false);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
@@ -337,9 +587,7 @@ importStudents.setVisible(true);
     }//GEN-LAST:event_jMenuItem3MouseClicked
 
     private void jMenuBar1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuBar1MouseClicked
-        ViewCourses courses = new ViewCourses();
-        courses.setVisible(true);
-        setVisible(false);
+       
 // TODO add your handling code here:
     }//GEN-LAST:event_jMenuBar1MouseClicked
 
@@ -387,11 +635,15 @@ setVisible(false);// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
-        // TODO add your handling code here:
+ViewScheduleReport sr = new ViewScheduleReport();
+sr.setVisible(true);
+setVisible(false);        // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
-        // TODO add your handling code here:
+           ViewStudentReport sr = new ViewStudentReport();
+sr.setVisible(true);
+setVisible(false);// TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -440,6 +692,7 @@ login.setVisible(true);
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;

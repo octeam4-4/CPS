@@ -6,11 +6,11 @@
 package com.java.planner;
 
 import com.java.planner.vo.CourseVO;
+import com.java.planner.vo.DegreePlanVO;
 import com.java.planner.vo.DegreeVO;
 import com.java.planner.vo.FacultyVO;
 import com.java.planner.vo.StudentCourseVO;
 import com.java.planner.vo.StudentVO;
-import com.java.planner.vo.UserVO;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
@@ -47,18 +47,18 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author sku263
  */
-public class ModifyUser extends javax.swing.JFrame {
+public class ModifyDegreePlan extends javax.swing.JFrame {
 
    
 
        
  
 
-
+DegreePlanVO degreePlanVO = null;
     /**
      * Creates new form ImportStudents
      */
-    public ModifyUser(String faculty) {
+    public ModifyDegreePlan(String degree) {
 
         initComponents();
        // setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/images/icon.png")));
@@ -66,19 +66,22 @@ public class ModifyUser extends javax.swing.JFrame {
                 getMaximumWindowBounds();
         this.setSize(maxBounds.width, maxBounds.height);
         WindowClosingEventHandler();
-    load(faculty);
+     degreePlanVO = load(degree);
   
 
     }
 
-    private void load(String username){
-        UserVO userVO = CoursePlanner.userMap.get(username);
+    private DegreePlanVO load(String degree){
+        DegreePlanVO degreeVO = CoursePlanner.planMap.get(degree);
        
-jTextField9.setText(userVO.getUserName());
-jTextField7.setText(userVO.getPassword());
-jTextField4.setText(userVO.getRole());
-jTextField6.setText(userVO.getStatus());
-jTextField5.setText(userVO.getFullname());
+jTextField10.setText(degreeVO.getDegreeCode());
+jTextField4.setText(degreeVO.getDepartment());
+jTextField12.setText(degreeVO.getElectiveHrs());
+jTextField9.setText(degreeVO.getRequiredHrs());
+jTextArea1.setText(degreeVO.geteCourseAppended());
+jTextArea2.setText(degreeVO.getrCoursesAppended());
+
+return degreeVO;
 
       
        
@@ -121,120 +124,71 @@ jTextField5.setText(userVO.getFullname());
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tot = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jButton10 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
         tot1 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
+        jTextField4 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
         jTextField9 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jButton9 = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
-        jButton7 = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        jTextField10 = new javax.swing.JTextField();
+        jTextField11 = new javax.swing.JTextField();
+        jTextField12 = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
-
-        tot.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        getContentPane().add(tot);
-        tot.setBounds(12, 390, 199, 60);
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(218, 198, 0, 0);
+        jLabel3.setBounds(264, 191, 0, 0);
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel4.setText("Modify Degree Plan");
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(530, 30, 270, 46);
+
+        jButton10.setBackground(new java.awt.Color(57, 53, 53));
+        jButton10.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jButton10.setForeground(new java.awt.Color(255, 255, 255));
+        jButton10.setMnemonic('S');
+        jButton10.setText("Modify Degree Plan");
+        jButton10.setToolTipText("Alt+S");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton10);
+        jButton10.setBounds(520, 450, 200, 40);
+
+        jButton8.setBackground(new java.awt.Color(57, 53, 53));
+        jButton8.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jButton8.setForeground(new java.awt.Color(255, 255, 255));
+        jButton8.setMnemonic('h');
+        jButton8.setText("Back");
+        jButton8.setToolTipText("Alt+H");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton8);
+        jButton8.setBounds(1040, 450, 140, 40);
 
         tot1.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         getContentPane().add(tot1);
-        tot1.setBounds(225, 410, 199, 60);
-
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jTextField5);
-        jTextField5.setBounds(1080, 122, 174, 39);
-
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField6ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jTextField6);
-        jTextField6.setBounds(731, 208, 174, 39);
-
-        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel11.setText("FullName");
-        getContentPane().add(jLabel11);
-        jLabel11.setBounds(949, 133, 102, 16);
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel1.setText("Password");
-        getContentPane().add(jLabel1);
-        jLabel1.setBounds(225, 208, 87, 39);
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel6.setText("UserName");
-        getContentPane().add(jLabel6);
-        jLabel6.setBounds(225, 133, 102, 16);
-
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jTextField7);
-        jTextField7.setBounds(370, 208, 159, 39);
-        getContentPane().add(jTextField9);
-        jTextField9.setBounds(370, 122, 159, 39);
-
-        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel7.setText("Status");
-        getContentPane().add(jLabel7);
-        jLabel7.setBounds(611, 219, 102, 16);
-
-        jButton9.setBackground(new java.awt.Color(57, 53, 53));
-        jButton9.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jButton9.setForeground(new java.awt.Color(255, 255, 255));
-        jButton9.setMnemonic('S');
-        jButton9.setText("Modify User");
-        jButton9.setToolTipText("Alt+S");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton9);
-        jButton9.setBounds(359, 343, 170, 40);
-
-        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel10.setText("Role");
-        getContentPane().add(jLabel10);
-        jLabel10.setBounds(611, 133, 102, 16);
-
-        jButton7.setBackground(new java.awt.Color(57, 53, 53));
-        jButton7.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
-        jButton7.setForeground(new java.awt.Color(255, 255, 255));
-        jButton7.setMnemonic('h');
-        jButton7.setText("Back");
-        jButton7.setToolTipText("Alt+H");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jButton7);
-        jButton7.setBounds(731, 343, 140, 40);
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel4.setText("Modify User");
-        getContentPane().add(jLabel4);
-        jLabel4.setBounds(534, 21, 210, 46);
+        tot1.setBounds(271, 410, 199, 60);
 
         jTextField4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -242,47 +196,97 @@ jTextField5.setText(userVO.getFullname());
             }
         });
         getContentPane().add(jTextField4);
-        jTextField4.setBounds(731, 122, 174, 39);
+        jTextField4.setBounds(704, 168, 174, 39);
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel1.setText("*Use comma seprator after every course");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(400, 410, 330, 39);
+        getContentPane().add(jTextField9);
+        jTextField9.setBounds(1080, 270, 159, 39);
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel7.setText("Elective Courses*");
+        getContentPane().add(jLabel7);
+        jLabel7.setBounds(580, 280, 120, 50);
+
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel8.setText("DegreeCode");
+        getContentPane().add(jLabel8);
+        jLabel8.setBounds(230, 180, 102, 20);
+        getContentPane().add(jTextField10);
+        jTextField10.setBounds(393, 168, 159, 39);
+        getContentPane().add(jTextField11);
+        jTextField11.setBounds(393, 168, 159, 39);
+        getContentPane().add(jTextField12);
+        jTextField12.setBounds(1080, 170, 159, 39);
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel11.setText("Department");
+        getContentPane().add(jLabel11);
+        jLabel11.setBounds(590, 179, 102, 16);
+
+        jLabel12.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel12.setText("Hrs Required For Required");
+        getContentPane().add(jLabel12);
+        jLabel12.setBounds(890, 280, 170, 16);
+
+        jLabel13.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel13.setText("Hrs Required For Elective");
+        getContentPane().add(jLabel13);
+        jLabel13.setBounds(890, 180, 170, 16);
+
+        jLabel14.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel14.setText("Hrs Required For Elective");
+        getContentPane().add(jLabel14);
+        jLabel14.setBounds(890, 180, 170, 16);
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane3.setViewportView(jTextArea1);
+
+        getContentPane().add(jScrollPane3);
+        jScrollPane3.setBounds(710, 270, 166, 110);
+
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        jScrollPane4.setViewportView(jTextArea2);
+
+        getContentPane().add(jScrollPane4);
+        jScrollPane4.setBounds(390, 280, 166, 110);
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabel2.setText("Required Courses*");
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(220, 290, 130, 39);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+      
+degreePlanVO.setDegreeCode((String)jTextField10.getText());
+degreePlanVO.setDepartment(jTextField4.getText());
+degreePlanVO.setElectiveHrs((String)(jTextField12.getText()));
+degreePlanVO.setRequiredHrs((String)jTextField9.getText());
+degreePlanVO.seteCourseAppended((String)jTextArea1.getText());
+degreePlanVO.setrCoursesAppended((String)jTextArea2.getText());
+
+        JOptionPane.showMessageDialog(this, "Degree Plan Modified");
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+    }//GEN-LAST:event_jButton10ActionPerformed
 
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6ActionPerformed
-
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
-
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-       UserVO userVO = new UserVO();
-userVO.setUserName((String)jTextField9.getText());
-userVO.setPassword(jTextField7.getText());
-userVO.setRole((String)(jTextField4.getText()));
-userVO.setStatus((String)jTextField6.getText());
-userVO.setFullname((String)jTextField5.getText());
-
-CoursePlanner.userMap.put(userVO.getUserName(),userVO);
-JOptionPane.showMessageDialog(this, "User Modified");
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton9ActionPerformed
-
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
 
         try {
-            ViewUsers me = new ViewUsers();
+            ViewDegreePlan me = new ViewDegreePlan();
             me.setVisible(true);
             setVisible(false);
         } catch (Exception e) {
             e.printStackTrace();
         }
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
         // TODO add your handling code here:
@@ -305,13 +309,13 @@ JOptionPane.showMessageDialog(this, "User Modified");
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ModifyUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifyDegreePlan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ModifyUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifyDegreePlan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ModifyUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifyDegreePlan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ModifyUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ModifyDegreePlan.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -8509,27 +8513,33 @@ JOptionPane.showMessageDialog(this, "User Modified");
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ModifyUser(null).setVisible(true);
+                new ModifyDegreePlan(null).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton9;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTextField jTextField10;
+    private javax.swing.JTextField jTextField11;
+    private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField9;
-    private javax.swing.JLabel tot;
     private javax.swing.JLabel tot1;
     // End of variables declaration//GEN-END:variables
 }
